@@ -5,6 +5,7 @@ body {
 .wrapper {	
   margin-top: 80px;
   margin-bottom: 80px;
+  border-radius: 5px;
 }
 
 .form-signin {
@@ -95,4 +96,13 @@ body {
 .tt-suggestion p {
     margin: 0;
 }
-.twitter-typeahead { width: 100%; } 
+.twitter-typeahead { 
+	width: 100%; 
+} 
+
+ul {
+  list-style: none;
+  list-style-type: none;
+  padding:0; 
+  margin:0;
+}

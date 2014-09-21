@@ -21,7 +21,6 @@ public class JogadorController {
 	
 	@Autowired
 	public JogadorController(ApplicationService service) {
-		super();
 		this.service = service;
 	}
 

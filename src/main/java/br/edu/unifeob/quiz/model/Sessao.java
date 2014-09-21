@@ -1,12 +1,14 @@
 package br.edu.unifeob.quiz.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,9 +48,9 @@ public class Sessao implements Serializable {
     	joinColumns=@JoinColumn(name="sessao_id"),
     	inverseJoinColumns=@JoinColumn(name="jogador_id")
 	)
-	private List<Jogador> jogadores;
+	private Set<Jogador> jogadores;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(
     	joinColumns=@JoinColumn(name="sessao_id"),
     	inverseJoinColumns=@JoinColumn(name="pergunta_id")
@@ -84,11 +86,11 @@ public class Sessao implements Serializable {
 		this.fim = fim;
 	}
 
-	public List<Jogador> getJogadores() {
+	public Set<Jogador> getJogadores() {
 		return jogadores;
 	}
 
-	public void setJogadores(List<Jogador> jogadores) {
+	public void setJogadores(Set<Jogador> jogadores) {
 		this.jogadores = jogadores;
 	}
 
@@ -110,7 +112,7 @@ public class Sessao implements Serializable {
 
 	public void iniciar(List<Pergunta> perguntas) {
 		setInicio(Calendar.getInstance());
-		setJogadores(new ArrayList<Jogador>());
+		setJogadores(new HashSet<Jogador>());
 		setPerguntas(perguntas);
 	}
 	
@@ -120,6 +122,14 @@ public class Sessao implements Serializable {
 	
 	public boolean isFinalizada() {
 		return fim != null;
+	}
+	
+	public void addJogador(Jogador jogador) {
+		if (jogadores == null) {
+			jogadores = new HashSet<>();
+		}
+		
+		jogadores.add(jogador);
 	}
 	
 	public Ganhador getGanhador() {

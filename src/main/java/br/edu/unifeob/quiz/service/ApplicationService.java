@@ -21,17 +21,25 @@ public class ApplicationService {
 	@PersistenceContext(name="unifeob")
 	private EntityManager em;
 
-	@SuppressWarnings("unchecked")
+	@Transactional(readOnly=true)
 	public List<Jogador> getJogadores() {
-		Query query = em.createQuery("select j from Jogador j order by j.nome");
-		
-		return query.getResultList();
+		return getJogadores(null);
 	}
 
+	@Transactional(readOnly=true)
 	@SuppressWarnings("unchecked")
 	public List<Jogador> getJogadores(String nome) {
-		Query query = em.createQuery("select j from Jogador j where j.nome like :nome");
-		query.setParameter("nome", nome + "%");
+		String sql = "select j from Jogador j";
+		
+		if (nome != null) {
+			 sql += " where j.nome like :nome";
+		}
+		
+		Query query = em.createQuery(sql);
+		
+		if (nome != null) {
+			query.setParameter("nome", nome + "%");
+		}
 		
 		return query.getResultList();
 	}
@@ -48,6 +56,7 @@ public class ApplicationService {
 		return em.merge(jogador);
 	}
 	
+	@Transactional(readOnly=true)
 	private Jogador procurarJogador(String nome, String email) {
 		Query query = em.createQuery("select j from Jogador j where j.nome = :nome and j.email = :email");
 		query.setParameter("nome", nome);
@@ -63,6 +72,7 @@ public class ApplicationService {
 		return lista.get(0);
 	}
 	
+	@Transactional(readOnly=true)
 	public Sessao getSessaoAtiva() {
 		Query query = em.createQuery("select s from Sessao s where s.fim IS NULL order by s.id desc");
 		
@@ -86,26 +96,38 @@ public class ApplicationService {
 		return em.merge(sessao);
 	}
 	
+	@Transactional(readOnly=true)
 	public List<Pergunta> getPergutas(int quantidade) {
 		Query query = em.createQuery("select p from Pergunta p");
 		
 		@SuppressWarnings("unchecked")
 		List<Pergunta> lista = query.getResultList();
 		
-		//Embaralha
+		//Embaralha 2 vezes
+		Collections.shuffle(lista);
 		Collections.shuffle(lista);
 		
 		return lista.subList(0, quantidade);
 	}
 
+	@Transactional(readOnly=true)
 	public Sessao procurarSessao(Long id) {
 		return  em.find(Sessao.class, id);
 	}
 	
+	@Transactional(readOnly=true)
 	@SuppressWarnings("unchecked")
 	public List<Pontuacao> getPontuacoes(Sessao sessao) {
 		Query query = em.createQuery("select p from Pontuacao p where p.sessao = :sessao order by p.totalPontos desc");
 		query.setParameter("sessao", sessao);
+		
+		return query.getResultList();
+	}
+
+	@Transactional(readOnly=true)
+	@SuppressWarnings("unchecked")
+	public List<Sessao> getSessoes() {
+		Query query = em.createQuery("select s from Sessao s order by s.id desc");
 		
 		return query.getResultList();
 	}

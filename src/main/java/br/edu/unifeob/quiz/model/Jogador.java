@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Leonardo Marcelino
  *
  */
+
 @Entity
 @Table(name="jogadores")
 public class Jogador implements Serializable {

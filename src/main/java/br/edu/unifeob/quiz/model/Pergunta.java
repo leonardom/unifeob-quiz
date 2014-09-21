@@ -46,11 +46,11 @@ public class Pergunta implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public List<OpcaoResposta> getOpcoes() {
+	public List<OpcaoResposta> getOpcoesResposta() {
 		return opcoesResposta;
 	}
 
-	public void setOpcoes(List<OpcaoResposta> opcoes) {
+	public void setOpcoesResposta(List<OpcaoResposta> opcoes) {
 		this.opcoesResposta = opcoes;
 	}
 }
