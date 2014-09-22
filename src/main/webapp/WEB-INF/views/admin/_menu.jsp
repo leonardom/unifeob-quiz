@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -13,8 +15,9 @@
     </div>
     <div class="navbar-collapse collapse">
          <ul class="nav navbar-nav">
-           <li><a href="<c:url value="/sessao/ativa"/>">Sess&atilde;o Ativa</a></li>
-           <li><a href="<c:url value="/sessoes"/>">Sess&otilde;es</a></li>
+           <li><a href="<c:url value="/admin/sessao/ativa"/>">Sess&atilde;o Ativa</a></li>
+           <li><a href="<c:url value="/admin/sessoes"/>">Sess&otilde;es</a></li>
+           <li><a href="<c:url value="/admin/jogadores"/>">Jogadores</a></li>
          </ul>
        </div>
   </div>
