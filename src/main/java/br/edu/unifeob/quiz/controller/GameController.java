@@ -50,6 +50,7 @@ public class GameController {
 		sessao = service.salvar(sessao);
 		
 		model.addAttribute("sessao", sessao);
+		model.addAttribute("pontuacao", service.getPontuacao(sessao, jogadorLogado.getJogador()));
 		
 		return "jogar";
 	}
@@ -79,7 +80,7 @@ public class GameController {
 		service.salvar(resposta);
 		
 		if (resposta.isCorreta()) {
-			return  "{\"status\": \"correta\", \"pontos\": 10}";
+			return  "{\"status\": \"correta\", \"opcao\": \"" + opcao.getDescricao() + "\", \"pontos\": 10}";
 		} else{
 			return  "{\"status\": \"incorreta\"}";
 		}

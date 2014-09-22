@@ -42,7 +42,7 @@ public class Sessao implements Serializable {
 	@Column(nullable=true)
 	private Calendar fim;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(
     	joinColumns=@JoinColumn(name="sessao_id"),
     	inverseJoinColumns=@JoinColumn(name="jogador_id")
@@ -57,10 +57,14 @@ public class Sessao implements Serializable {
     )
 	private List<Pergunta> perguntas;
 
-	@OneToMany(mappedBy="sessao")
+	@OneToMany(mappedBy="sessao", fetch=FetchType.EAGER)
 	@JoinColumn(name="sessao_id")
 	@OrderBy("totalPontos DESC")
 	private List<Pontuacao> pontuacoes;
+
+	@OneToMany(mappedBy="sessao", fetch=FetchType.EAGER)
+	@JoinColumn(name="sessao_id")
+	private List<Resposta> respostas;
 
 	public Long getId() {
 		return id;
@@ -95,6 +99,18 @@ public class Sessao implements Serializable {
 	}
 
 	public List<Pergunta> getPerguntas() {
+		return perguntas;
+	}
+
+	public List<Pergunta> getQuestionario() {
+		for (Pergunta pergunta: perguntas) {
+			for (Resposta resposta: respostas) {
+				if (resposta.getPergunta().equals(pergunta)) {
+					pergunta.setResposta(resposta);
+				}
+			}
+		}
+		
 		return perguntas;
 	}
 

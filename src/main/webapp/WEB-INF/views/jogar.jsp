@@ -39,7 +39,7 @@
 		    <li><a href="#">&nbsp;</a></li>
 		    <li><a href="#"><strong>Jogador:</strong> ${jogadorLogado.nome}</a></li>
 		    <li><a href="#">&nbsp;</a></li>
-		    <li><a href="#"><strong>Pontos:</strong> 0</a></li>
+		    <li><a href="#"><strong>Pontos:</strong> <span id="pontos">${pontuacao.totalPontos}</span></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -60,11 +60,12 @@
       <h2>Perguntas</h2>
 	  
 	  <ul id="perguntas" class="list-unstyled">
-      <c:forEach var="pergunta" items="${sessao.perguntas}">
+      <c:forEach var="pergunta" items="${sessao.questionario}">
         <li>
           <div class="jumbotron">
           <form id="frm_${pergunta.id}">
-          ${pergunta.descricao}
+          <strong>${pergunta.descricao}</strong>
+          <c:if test="${empty pergunta.resposta}">
           <div id="opcoes_pergunta_${pergunta.id}">
 		    <ul id="opcoes_${pergunta.id}" class="list-unstyled">
               <c:forEach items="${pergunta.opcoesResposta}" var="opcao">
@@ -73,8 +74,20 @@
               <li><input type="button" value="Responser" class="btn btn-success envia" id="${pergunta.id}"/></li>
             </ul>
           </div>
+          </c:if>
           </form>
-          <div id="debug_${pergunta.id}"></div>
+          <div id="feedback_${pergunta.id}">
+            <c:if test="${pergunta.resposta.jogador.id == jogadorLogado.id}">
+              <span style="${pergunta.resposta.correta ? 'color:blue' : 'color:red'}">
+                Resposta ${pergunta.resposta.correta ? 'correta: '.concat(pergunta.resposta.opcao.descricao) : 'incorreta'}
+              </span>
+            </c:if> 
+            <c:if test="${pergunta.resposta != null && pergunta.resposta.jogador.id != jogadorLogado.id}">
+              <span style="color:orange">
+                Já respondida pelo oponente
+              </span>
+            </c:if> 
+          </div>
 	      </div>
         </li>
       </c:forEach>
@@ -92,12 +105,22 @@
 
           $('#opcoes_pergunta_' + perguntaId).fadeOut("fast");
           
-          $('#debug_' + perguntaId).html("Opcao selecionado:" + opcao);
-          
           var url = '<c:url value="/responder"/>/' + perguntaId + "/" + opcao; 
           
           $.getJSON(url, function(data) {
-        	 console.log(data); 
+        	  if (data.status == "correta") {
+        		  var pontos = Number($('#pontos').html());
+        		  pontos += data.pontos;
+        		  $('#pontos').html(pontos);
+                  
+        		  $('#feedback_' + perguntaId).html("<span style='color:blue'>Resposta correta: " + data.opcao + "</span>");
+        	  } else if (data.status == "incorreta") {
+        		  $('#feedback_' + perguntaId).html("<span style='color:red'>Resposta incorreta</span>");
+        	  } else if (data.status == "respondida") {
+        		  $('#feedback_' + perguntaId).html("<span style='color:orange'>Já respondida pelo oponente</span>");
+        	  }
+        	  
+        	  $('#feedback_' + perguntaId).fadeIn("fast");
           });
 
       });

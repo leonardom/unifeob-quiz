@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 
@@ -29,6 +30,9 @@ public class Pergunta implements Serializable {
 
 	@OneToMany(mappedBy = "pergunta")
 	private List<OpcaoResposta> opcoesResposta;
+	
+	@Transient
+	private Resposta resposta;
 
 	public Long getId() {
 		return id;
@@ -52,5 +56,13 @@ public class Pergunta implements Serializable {
 
 	public void setOpcoesResposta(List<OpcaoResposta> opcoes) {
 		this.opcoesResposta = opcoes;
+	}
+
+	public Resposta getResposta() {
+		return resposta;
+	}
+
+	public void setResposta(Resposta resposta) {
+		this.resposta = resposta;
 	}
 }
