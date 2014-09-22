@@ -57,11 +57,11 @@ public class Pontuacao implements Serializable {
 		this.jogador = jogador;
 	}
 
-	public int getQuatidadePontos() {
+	public int getTotalPontos() {
 		return totalPontos;
 	}
 
-	public void setQuatidadePontos(int quatidadePontos) {
-		this.totalPontos = quatidadePontos;
+	public void somar(int pontos) {
+		this.totalPontos += pontos;
 	}
 }

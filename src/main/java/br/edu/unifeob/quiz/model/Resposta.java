@@ -74,4 +74,8 @@ public class Resposta implements Serializable{
 	public void setOpcao(OpcaoResposta opcao) {
 		this.opcao = opcao;
 	}
+	
+	public boolean isCorreta() {
+		return (opcao != null && opcao.isCorreta());
+	}
 }

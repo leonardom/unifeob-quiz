@@ -92,7 +92,13 @@
 
           $('#opcoes_pergunta_' + perguntaId).fadeOut("fast");
           
-          $('#debug_' + perguntaId).html("Opcao selecionado:" + opcao);          
+          $('#debug_' + perguntaId).html("Opcao selecionado:" + opcao);
+          
+          var url = '<c:url value="/responder"/>/' + perguntaId + "/" + opcao; 
+          
+          $.getJSON(url, function(data) {
+        	 console.log(data); 
+          });
 
       });
     });

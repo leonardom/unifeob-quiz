@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.unifeob.quiz.model.Jogador;
+import br.edu.unifeob.quiz.model.OpcaoResposta;
 import br.edu.unifeob.quiz.model.Pergunta;
 import br.edu.unifeob.quiz.model.Pontuacao;
+import br.edu.unifeob.quiz.model.Resposta;
 import br.edu.unifeob.quiz.model.Sessao;
 
 @Service
@@ -130,5 +132,83 @@ public class ApplicationService {
 		Query query = em.createQuery("select s from Sessao s order by s.id desc");
 		
 		return query.getResultList();
+	}
+	
+	@Transactional(readOnly=true)
+	public Resposta getResposta(Sessao sessao, Pergunta pergunta) {
+		Query query = em.createQuery("select r from Resposta r where r.sessao = :sessao and r.pergunta = :pergunta");
+		query.setParameter("sessao", sessao);
+		query.setParameter("pergunta", pergunta);
+		
+		@SuppressWarnings("unchecked")
+		List<Resposta> lista = query.getResultList();
+		
+		if (lista == null || lista.isEmpty()) {
+			return null;
+		}
+		
+		return lista.get(0);
+	}
+	
+	@Transactional(readOnly=true)
+	public Pergunta getPergunta(Long id) {
+		return em.find(Pergunta.class, id);
+	}
+
+	@Transactional(readOnly=true)
+	public OpcaoResposta getOpcaoResposta(Long id) {
+		return em.find(OpcaoResposta.class, id);
+	}
+
+	@Transactional
+	public Resposta salvar(Resposta resposta) {
+		em.persist(resposta);
+		
+		pontuar(resposta);
+		
+		return em.merge(resposta);
+	}
+	
+	@Transactional(readOnly=true)
+	public Pontuacao getPontuacao(Sessao sessao, Jogador jogador) {
+		Query query = em.createQuery("select p from Pontuacao p where p.sessao = :sessao and p.jogador = :jogador");
+		query.setParameter("sessao", sessao);
+		query.setParameter("jogador", jogador);
+		
+		@SuppressWarnings("unchecked")
+		List<Pontuacao> lista = query.getResultList();
+		
+		if (lista == null || lista.isEmpty()) {
+			Pontuacao pontuacao = new Pontuacao();
+			pontuacao.setSessao(sessao);
+			pontuacao.setJogador(jogador);
+			
+			return salvar(pontuacao);
+		}
+		
+		return lista.get(0);
+	}
+
+	@Transactional
+	public void pontuar(Resposta resposta) {
+		Pontuacao pontuacao = getPontuacao(
+				resposta.getSessao(), 
+				resposta.getJogador()
+		);
+		
+		if (resposta.isCorreta()) {
+			pontuacao.somar(10);
+			salvar(pontuacao);
+		}
+	}
+	
+	@Transactional
+	public Pontuacao salvar(Pontuacao pontuacao) {
+		if (pontuacao.getId() == null) {
+			em.persist(pontuacao);
+			return pontuacao;
+		}
+		
+		return em.merge(pontuacao);
 	}
 }
