@@ -47,7 +47,7 @@ CREATE TABLE `perguntas` (
 
 INSERT INTO `perguntas` (`id`, `descricao`)
 VALUES
-	(1,'Em que ano o Brasil conquistou a última copa do munda de futebol?'),
+	(1,'Em que ano o Brasil conquistou a última copa do mundo de futebol?'),
 	(2,'Como e composta a Molécula da agua?'),
 	(3,'O que é a Via Lactea?'),
 	(4,'Quem era o homem mais sedutor do mundo?'),

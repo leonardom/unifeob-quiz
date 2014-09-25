@@ -111,8 +111,6 @@ public class ApplicationService {
 		@SuppressWarnings("unchecked")
 		List<Pergunta> lista = query.getResultList();
 		
-		//Embaralha 2 vezes
-		Collections.shuffle(lista);
 		Collections.shuffle(lista);
 		
 		return lista.subList(0, quantidade);
