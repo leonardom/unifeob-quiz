@@ -20,6 +20,13 @@
 	    <div class="container">
         <h1>Sess&otilde;es</h1>
         
+        <h3>Nova Sess&atilde;o</h1>
+        <form action="<c:url value="/admin/sessoes/nova"/>" method="POST">
+        	<label>Quantidade de perguntas:</label>
+        	<input type="text" name="quatidadePerguntas" value="10" size="3"/>
+        	<input type="submit" value="Criar"/>
+        </form>
+		<br/>        
         <table class="table table-condensed table-striped table-bordered table-hover">
 	        <thead>
 	          <tr>

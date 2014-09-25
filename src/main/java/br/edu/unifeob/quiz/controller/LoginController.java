@@ -51,7 +51,7 @@ public class LoginController {
 			return "/entrar";
 		}
 		
-		service.salvar(jogador);
+		jogador = service.salvar(jogador);
 		model.addAttribute("jogador", jogador);
 		
 		jogadorLogado.setJogador(jogador);

@@ -57,7 +57,8 @@ VALUES
 	(8,'Qual casal foi expulso do Paraiso?'),
 	(9,'Na literatura, quem foi o criado da boneca Emilia?'),
 	(10,'Quem é o primeiro substituto do Presidente?'),
-	(11,'Qual é o clube brasileiro que ganhou o último mundial inter clubes?');
+	(11,'Qual é o clube brasileiro que ganhou o último mundial inter clubes?'),
+	(12,'Quem descobriu o Brazil?');
 
 
 DROP TABLE IF EXISTS `opcoes_resposta`;
@@ -104,8 +105,11 @@ VALUES
 	(29,00000000,'Senador',10),
 	(30,00000000,'Deputado Federal',10),
 	(31,00000000,'São Paulo',11),
-	(32,00000000,'Internacional',11),
-	(33,00000000,'Atlético Mineiro',11);
+	(32,00000000,'Atlético Mineiro',11),
+	(33,00000001,'Corinthians',11),
+	(34,00000000,'Cristóvão Colombo',12),
+	(35,00000001,'Pedro Álvares Cabral',12),
+	(36,00000000,'Edson Arantes do Nascimento',12);
 
 DROP TABLE IF EXISTS `Pontuacoes`;
 

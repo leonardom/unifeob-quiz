@@ -102,16 +102,32 @@ public class Sessao implements Serializable {
 		return perguntas;
 	}
 
-	public List<Pergunta> getQuestionario() {
-		for (Pergunta pergunta: perguntas) {
-			for (Resposta resposta: respostas) {
-				if (resposta.getPergunta().equals(pergunta)) {
-					pergunta.setResposta(resposta);
-				}
+	/**
+	 * Tenta retornar a resposta correta primeiro
+
+	 * @param perguntaId
+	 * @param jogadorId
+	 * 
+	 * @return resposta
+	 */
+	public Resposta getResposta(Pergunta pergunta) {
+		Resposta reposta = getResposta(pergunta, true);
+		
+		if (reposta == null) {
+			reposta = getResposta(pergunta, false);
+		}
+		
+		return reposta;
+	}
+
+	private Resposta getResposta(Pergunta pergunta, boolean correta) {
+		for (Resposta resposta: respostas) {
+			if (resposta.getPergunta().equals(pergunta) && resposta.isCorreta() == correta) {
+				return resposta;
 			}
 		}
 		
-		return perguntas;
+		return null;
 	}
 
 	public void setPerguntas(List<Pergunta> perguntas) {
@@ -159,5 +175,15 @@ public class Sessao implements Serializable {
 				pontuacoes.get(0).getJogador().getNome(), 
 				pontuacoes.get(0).getTotalPontos()
 		); 
+	}
+	
+	public boolean isTodasPerguntasRespondidas() {
+		for (Pergunta pergunta: perguntas) {
+			Resposta resposta = getResposta(pergunta, true);
+			
+			if (resposta == null) return false;
+		}
+		
+		return true;
 	}
 }

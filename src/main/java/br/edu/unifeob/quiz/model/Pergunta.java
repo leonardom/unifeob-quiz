@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * 
@@ -31,9 +30,6 @@ public class Pergunta implements Serializable {
 	@OneToMany(mappedBy = "pergunta")
 	private List<OpcaoResposta> opcoesResposta;
 	
-	@Transient
-	private Resposta resposta;
-
 	public Long getId() {
 		return id;
 	}
@@ -58,11 +54,28 @@ public class Pergunta implements Serializable {
 		this.opcoesResposta = opcoes;
 	}
 
-	public Resposta getResposta() {
-		return resposta;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
-	public void setResposta(Resposta resposta) {
-		this.resposta = resposta;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pergunta other = (Pergunta) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

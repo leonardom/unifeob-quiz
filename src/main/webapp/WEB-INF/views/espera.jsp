@@ -61,15 +61,17 @@
       
       // Callback 
       var checkSession = function(frame) {
-    	  var msg = JSON.parse(frame.body);
-    	  if (msg == "iniciada") {
+          //por alguma razao que ainda nao sei explicar tive que chamar o parse duas vezes\
+          //para ter um objeto Javascript
+    	  var msg = JSON.parse(JSON.parse(frame.body));
+    	  if (msg.status == "iniciado") {
     	    location.href = '<c:url value="/jogar"/>';
     	  }
       };
 
       // Callback function a ser chamada quando o cliente stomp conecta com o servidor
       var connectCallback = function() {
-        stompClient.subscribe('/topic/sessao', checkSession);
+        stompClient.subscribe('/topic/game', checkSession);
       }; 
 
       // Callback function a ser chamda quando o cliente stomp nao conecta com o servidor

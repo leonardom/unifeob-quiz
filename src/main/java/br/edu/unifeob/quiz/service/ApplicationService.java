@@ -14,6 +14,7 @@ import br.edu.unifeob.quiz.model.Jogador;
 import br.edu.unifeob.quiz.model.OpcaoResposta;
 import br.edu.unifeob.quiz.model.Pergunta;
 import br.edu.unifeob.quiz.model.Pontuacao;
+import br.edu.unifeob.quiz.model.Posicao;
 import br.edu.unifeob.quiz.model.Resposta;
 import br.edu.unifeob.quiz.model.Sessao;
 
@@ -74,6 +75,11 @@ public class ApplicationService {
 		return lista.get(0);
 	}
 	
+	@Transactional(readOnly=true)
+	public Sessao getSessao(Long sessaoId) {
+		return em.find(Sessao.class, sessaoId);
+	}
+
 	@Transactional(readOnly=true)
 	public Sessao getSessaoAtiva() {
 		Query query = em.createQuery("select s from Sessao s where s.fim IS NULL order by s.id desc");
@@ -136,7 +142,11 @@ public class ApplicationService {
 	
 	@Transactional(readOnly=true)
 	public Resposta getResposta(Sessao sessao, Pergunta pergunta) {
-		Query query = em.createQuery("select r from Resposta r where r.sessao = :sessao and r.pergunta = :pergunta");
+		String sql = "select r from Resposta r "
+				+ " where r.sessao = :sessao and r.pergunta = :pergunta"
+				+ " order by r.opcao.correta desc";
+	
+		Query query = em.createQuery(sql);
 		query.setParameter("sessao", sessao);
 		query.setParameter("pergunta", pergunta);
 		
@@ -210,5 +220,24 @@ public class ApplicationService {
 		}
 		
 		return em.merge(pontuacao);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Posicao> getRanking() {
+		String sql = "select new br.edu.unifeob.quiz.model.Posicao("
+				+ "p.jogador, sum(p.totalPontos)"
+				+ ") from Pontuacao p"
+				+ " group by p.jogador"
+				+ " order by sum(p.totalPontos) desc";
+		
+		Query query = em.createQuery(sql);
+		
+		return query.getResultList();
+	}
+
+	public boolean isTodasPerguntasRespondidas(Sessao sessao) {
+		sessao = em.find(Sessao.class, sessao.getId());
+
+		return sessao.isTodasPerguntasRespondidas();
 	}
 }

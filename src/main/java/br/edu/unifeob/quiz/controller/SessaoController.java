@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.edu.unifeob.quiz.model.Sessao;
 import br.edu.unifeob.quiz.service.ApplicationService;
@@ -32,21 +33,20 @@ public class SessaoController {
 		return "admin/sessoes";
 	}
 
-	@RequestMapping(value = "/sessoes/nova", method=RequestMethod.GET)
-    public String form(Model model) {
+	@RequestMapping(value = "/sessoes/nova", method=RequestMethod.POST)
+    public String nova(@RequestParam("quatidadePerguntas")Integer quantidade, Model model) {
 		Sessao sessao = service.getSessaoAtiva();
 		
 		//se nao existe sessao ativa ou esta finalizada cria uma nova
 		if (sessao == null || sessao.isFinalizada()) {
 			sessao = new Sessao();
-			sessao.iniciar(service.getPergutas(10));
-			
+			sessao.iniciar(service.getPergutas(quantidade));
 			sessao = service.salvar(sessao);
 			
 			model.addAttribute("sessao", sessao);
 			
-			//avisa os clientes para irem para o jogo
-			template.convertAndSend("/topic/sessao", "iniciada");
+			//avisa os clientes que a sessao foi criada
+			template.convertAndSend("/topic/game", "{\"status\": \"iniciado\"}");
 		}
 		
 		return exibir(sessao, model);
@@ -58,6 +58,8 @@ public class SessaoController {
 		sessao.finalizar();
 		service.salvar(sessao);
 		
+		template.convertAndSend("/topic/game", "{\"status\": \"finalizado\"}");
+
 		return exibir(sessao, model);
 	}
 
