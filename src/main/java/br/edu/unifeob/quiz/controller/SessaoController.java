@@ -78,6 +78,10 @@ public class SessaoController {
 	}
 	
 	public String exibir(Sessao sessao, Model model) {
+		if (sessao == null) {
+			return "redirect:/admin/sessoes";
+		}
+		
 		model.addAttribute("sessao", sessao);
 		
 		return "admin/sessao";
