@@ -34,6 +34,7 @@ DROP TABLE IF EXISTS `sessoes_perguntas`;
 CREATE TABLE `sessoes_perguntas` (
   `sessao_id` int(11) NOT NULL,
   `pergunta_id` int(11) NOT NULL,
+  `ordem` int(11),
   PRIMARY KEY (`sessao_id`, `pergunta_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

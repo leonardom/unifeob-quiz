@@ -1,5 +1,6 @@
 package br.edu.unifeob.quiz.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -113,7 +114,12 @@ public class ApplicationService {
 		
 		Collections.shuffle(lista);
 		
-		return lista.subList(0, quantidade);
+		List<Pergunta> novaLista = new ArrayList<>();
+		for (int i=0; i < quantidade; i++) {
+			novaLista.add(lista.get(i));
+		}
+		
+		return novaLista;
 	}
 
 	@Transactional(readOnly=true)

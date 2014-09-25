@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -55,6 +56,7 @@ public class Sessao implements Serializable {
     	joinColumns=@JoinColumn(name="sessao_id"),
     	inverseJoinColumns=@JoinColumn(name="pergunta_id")
     )
+	@OrderColumn(name="ordem")
 	private List<Pergunta> perguntas;
 
 	@OneToMany(mappedBy="sessao", fetch=FetchType.EAGER)
