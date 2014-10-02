@@ -56,7 +56,7 @@
     
     <script>
       //Create stomp client over sockJS protocol
-      var socket = new SockJS("/unifeob-quiz/ws");
+      var socket = new SockJS("<c:url value='/ws'/>");
       var stompClient = Stomp.over(socket);
       
       // Callback 

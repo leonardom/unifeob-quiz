@@ -103,7 +103,8 @@
     <script type="text/javascript">
 
     //Create stomp client over sockJS protocol
-    var socket = new SockJS("/unifeob-quiz/ws");
+    //var socket = new SockJS("/unifeob-quiz/ws");
+    var socket = new SockJS("<c:url value='/ws'/>");
     var stompClient = Stomp.over(socket);
     
     // Callback 
@@ -135,7 +136,7 @@
 
     // Callback function a ser chamda quando o cliente stomp nao conecta com o servidor
     var errorCallback = function(error) {
-      alert("Nao foi possivel conectar!\nErro: " + error.headers.message);
+      alert("Nao foi possivel conectar!\nErro: " + error);
     };
 
     // Connect ao servidor via websocket
